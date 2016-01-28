@@ -27,8 +27,8 @@ public protocol MKCubeViewControllerDataSource: NSObjectProtocol {
 
 public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
 
-    weak var dataSource: MKCubeViewControllerDataSource?
-    weak var delegate: MKCubeViewControllerDelegate?
+    public weak var dataSource: MKCubeViewControllerDataSource?
+    public weak var delegate: MKCubeViewControllerDelegate?
     
     private var controllers = [Int: UIViewController]()
     private var scrollOffset: CGFloat = 0
@@ -37,7 +37,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     
     lazy var scrollView: UIScrollView = {
     
-        let scrollView = UIScrollView(frame: .zero)
+        let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.pagingEnabled = true
@@ -49,16 +49,15 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     }()
     
     private(set) public var numberOfViewControllers: Int = 0
-    
-    public var currentViewControllerIndex: Int = 0 {
-    
-        didSet {
-            
-            scrollToViewControllerAtIndex(currentViewControllerIndex, animated: false)
-        }
-    }
-    
-    
+	
+    private(set) public var currentViewControllerIndex: Int = 0
+	
+	public func setCurrentIndex(index: Int) {
+		
+		currentViewControllerIndex = index
+		scrollToViewControllerAtIndex(currentViewControllerIndex, animated: false)
+	}
+	
     public var wrapEnabled: Bool = false {
     
         didSet {
@@ -70,7 +69,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     public override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+		
         view.addSubview(scrollView)
         
         reloadData()
@@ -79,7 +78,9 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     public override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
-        
+		
+		scrollView.frame = view.bounds
+		
         var pages = CGFloat(numberOfViewControllers)
         
         if wrapEnabled && numberOfViewControllers > 1 {
@@ -266,7 +267,8 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         
         //calculate visible indices
         var visibleIndices = Set<Int>()
-        
+        visibleIndices.insert(currentViewControllerIndex)
+		
         if wrapEnabled || currentViewControllerIndex < numberOfViewControllers - 1 {
             
             visibleIndices.insert(currentViewControllerIndex + 1)
@@ -423,18 +425,4 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     }
 }
 
-extension UIViewController {
 
-    var cubeViewController: MKCubeViewController? {
-    
-        get {
-        
-            if (parentViewController is MKCubeViewController) {
-                
-                return (parentViewController as! MKCubeViewController)
-            }
-            
-            return parentViewController?.cubeViewController
-        }
-    }
-}

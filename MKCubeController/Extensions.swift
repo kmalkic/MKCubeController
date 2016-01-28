@@ -47,3 +47,19 @@ extension Dictionary {
         return false
     }
 }
+
+extension UIViewController {
+	
+	public var cubeViewController: MKCubeViewController? {
+		
+		get {
+			
+			if (parentViewController is MKCubeViewController) {
+				
+				return (parentViewController as! MKCubeViewController)
+			}
+			
+			return parentViewController?.cubeViewController
+		}
+	}
+}
