@@ -35,7 +35,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     private var previousOffset: CGFloat = 0
     private var suppressScrollEvent: Bool = false
     
-    lazy var scrollView: UIScrollView = {
+    public lazy var scrollView: UIScrollView = {
     
         let scrollView = UIScrollView(frame: self.view.bounds)
         scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
