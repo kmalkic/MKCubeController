@@ -8,12 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		49BBCFED1C598D650052F869 /* MKCubeController.h in Headers */ = {isa = PBXBuildFile; fileRef = 49BBCFEC1C598D650052F869 /* MKCubeController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49BBCFF51C598D7E0052F869 /* MKCubeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBCFF41C598D7E0052F869 /* MKCubeViewController.swift */; };
+		49BBCFF71C599B4E0052F869 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BBCFF61C599B4E0052F869 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		49BBCFE91C598D650052F869 /* MKCubeController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MKCubeController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49BBCFEC1C598D650052F869 /* MKCubeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MKCubeController.h; sourceTree = "<group>"; };
 		49BBCFEE1C598D650052F869 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		49BBCFF41C598D7E0052F869 /* MKCubeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKCubeViewController.swift; sourceTree = "<group>"; };
+		49BBCFF61C599B4E0052F869 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +51,8 @@
 			isa = PBXGroup;
 			children = (
 				49BBCFEC1C598D650052F869 /* MKCubeController.h */,
+				49BBCFF41C598D7E0052F869 /* MKCubeViewController.swift */,
+				49BBCFF61C599B4E0052F869 /* Extensions.swift */,
 				49BBCFEE1C598D650052F869 /* Info.plist */,
 			);
 			path = MKCubeController;
@@ -130,6 +136,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49BBCFF51C598D7E0052F869 /* MKCubeViewController.swift in Sources */,
+				49BBCFF71C599B4E0052F869 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +236,7 @@
 		49BBCFF21C598D650052F869 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -238,12 +247,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kevinmalkic.MKCubeController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		49BBCFF31C598D650052F869 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
