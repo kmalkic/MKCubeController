@@ -17,6 +17,7 @@ public protocol MKCubeViewControllerDataSource: NSObjectProtocol {
 @objc public protocol MKCubeViewControllerDelegate: NSObjectProtocol {
     
     optional func cubeControllerDidScroll(cubeController: MKCubeViewController)
+	optional func cubeControllerCurrentViewControllerIndexWillChange(cubeController: MKCubeViewController)
     optional func cubeControllerCurrentViewControllerIndexDidChange(cubeController: MKCubeViewController)
     optional func cubeControllerWillBeginDragging(cubeController: MKCubeViewController)
     optional func cubeControllerDidEndDragging(cubeController: MKCubeViewController, willDecelerate decelerate: Bool)
@@ -369,7 +370,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
             
             if currentViewControllerIndex != previousViewControllerIndex {
                 
-                delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
+                delegate?.cubeControllerCurrentViewControllerIndexWillChange?(self)
             }
             
             //enable/disable interaction
@@ -390,9 +391,14 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         if !suppressScrollEvent {
             
             delegate?.cubeControllerDidEndDragging?(self, willDecelerate: decelerate)
+			
+			if !decelerate {
+				
+				delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
+			}
         }
     }
-    
+	
     public func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
         
         if !suppressScrollEvent {
@@ -406,6 +412,8 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         if !suppressScrollEvent {
             
             delegate?.cubeControllerDidEndDecelerating?(self)
+			
+			delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
         }
     }
     
@@ -421,6 +429,8 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         if !suppressScrollEvent {
             
             delegate?.cubeControllerDidEndScrollingAnimation?(self)
+			
+			delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
         }
     }
 }
