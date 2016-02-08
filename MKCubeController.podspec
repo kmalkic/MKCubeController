@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'MKCubeController'
-  s.version = '1.0.1'
+  s.version = '1.0.2'
   s.license = 'MIT'
   s.summary = 'MKCubeController is used to create a rotating 3D cube navigation in Swift 2.1.'
   s.description  = <<-DESC
