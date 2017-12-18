@@ -11,7 +11,7 @@ import MKCubeController
 
 class ViewController: UIViewController {
 
-	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
 		
 		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 	}
@@ -22,12 +22,12 @@ class ViewController: UIViewController {
 	
 	@IBAction func goForward() {
 		
-		cubeViewController?.scrollForwardAnimated(true)
+        cubeViewController?.scrollForwardAnimated(animated: true)
 	}
 	
 	@IBAction func goBack() {
 		
-		cubeViewController?.scrollBackAnimated(true)
+        cubeViewController?.scrollBackAnimated(animated: true)
 	}
 }
 

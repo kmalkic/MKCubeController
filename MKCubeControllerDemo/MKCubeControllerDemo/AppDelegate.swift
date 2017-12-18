@@ -14,19 +14,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MKCubeViewControllerDataS
 
 	var window: UIWindow?
 
-	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-
-		let controller = MKCubeViewController()
-		controller.dataSource = self
-		controller.wrapEnabled = true
-		
-		window = UIWindow(frame: UIScreen.mainScreen().bounds)
-		window!.rootViewController = controller
-		window!.makeKeyAndVisible()
-		
-		return true
-	}
-
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        let controller = MKCubeViewController()
+        controller.dataSource = self
+        controller.wrapEnabled = true
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window!.rootViewController = controller
+        window!.makeKeyAndVisible()
+        
+        return true
+    }
+    
 	func numberOfViewControllersInCubeController(cubeController: MKCubeViewController) -> Int {
 		
 		return 3

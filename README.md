@@ -6,8 +6,8 @@ Pretty much the same logic.
 
 
 ## Requirements
-- iOS 8.0+
-- Xcode 7.2+
+- iOS 9.0+
+- Xcode 9.2+
 
 ## Usage
 Pretty easy !
@@ -48,7 +48,7 @@ func cubeController(cubeController: MKCubeViewController, viewControllerAtIndex 
 
 ## Installation
 
-> **Embedded frameworks require a minimum deployment target of iOS 8.**
+> **Embedded frameworks require a minimum deployment target of iOS 9.**
 
 ### CocoaPods
 
@@ -58,16 +58,16 @@ func cubeController(cubeController: MKCubeViewController, viewControllerAtIndex 
 $ gem install cocoapods
 ```
 
-> CocoaPods 0.39.0+ is required to build MKCubeController 1.0.2+.
+> CocoaPods 1.3.1+ is required to build MKCubeController 1.1+.
 
 To integrate MKCubeController into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 
-pod 'MKCubeController', '~> 1.0.2'
+pod 'MKCubeController', '~> 1.1'
 ```
 
 Then, run the following command:

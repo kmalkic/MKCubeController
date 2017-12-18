@@ -10,13 +10,13 @@ extension Array {
 	
 	mutating internal func removeObject<U: Equatable>(object: U) -> Bool {
 		
-		for (idx, objectToCompare) in self.enumerate() {
+        for (idx, objectToCompare) in self.enumerated() {
 			
 			if let to = objectToCompare as? U {
 				
 				if object == to {
 					
-					self.removeAtIndex(idx)
+                    self.remove(at: idx)
 					
 					return true
 				}
@@ -37,7 +37,7 @@ extension Dictionary {
                 
                 if object == to {
                     
-                    self.removeValueForKey(key)
+                    self.removeValue(forKey: key)
                     
                     return true
                 }
@@ -54,12 +54,12 @@ extension UIViewController {
 		
 		get {
 			
-			if (parentViewController is MKCubeViewController) {
+            if let parentCubeViewController = parent as? MKCubeViewController {
 				
-				return (parentViewController as! MKCubeViewController)
+				return parentCubeViewController
 			}
 			
-			return parentViewController?.cubeViewController
+			return parent?.cubeViewController
 		}
 	}
 }

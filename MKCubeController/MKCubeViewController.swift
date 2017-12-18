@@ -16,14 +16,14 @@ public protocol MKCubeViewControllerDataSource: NSObjectProtocol {
 
 @objc public protocol MKCubeViewControllerDelegate: NSObjectProtocol {
     
-    optional func cubeControllerDidScroll(cubeController: MKCubeViewController)
-	optional func cubeControllerCurrentViewControllerIndexWillChange(cubeController: MKCubeViewController)
-    optional func cubeControllerCurrentViewControllerIndexDidChange(cubeController: MKCubeViewController)
-    optional func cubeControllerWillBeginDragging(cubeController: MKCubeViewController)
-    optional func cubeControllerDidEndDragging(cubeController: MKCubeViewController, willDecelerate decelerate: Bool)
-    optional func cubeControllerWillBeginDecelerating(cubeController: MKCubeViewController)
-    optional func cubeControllerDidEndDecelerating(cubeController: MKCubeViewController)
-    optional func cubeControllerDidEndScrollingAnimation(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerDidScroll(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerCurrentViewControllerIndexWillChange(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerCurrentViewControllerIndexDidChange(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerWillBeginDragging(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerDidEndDragging(cubeController: MKCubeViewController, willDecelerate decelerate: Bool)
+    @objc optional func cubeControllerWillBeginDecelerating(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerDidEndDecelerating(cubeController: MKCubeViewController)
+    @objc optional func cubeControllerDidEndScrollingAnimation(cubeController: MKCubeViewController)
 }
 
 public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
@@ -39,10 +39,10 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
     public lazy var scrollView: UIScrollView = {
     
         let scrollView = UIScrollView(frame: self.view.bounds)
-        scrollView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.pagingEnabled = true
-        scrollView.directionalLockEnabled = true
+        scrollView.isPagingEnabled = true
+        scrollView.isDirectionalLockEnabled = true
         scrollView.autoresizesSubviews = false
         scrollView.delegate = self
         
@@ -56,7 +56,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
 	public func setCurrentIndex(index: Int) {
 		
 		currentViewControllerIndex = index
-		scrollToViewControllerAtIndex(currentViewControllerIndex, animated: false)
+        scrollToViewControllerAtIndex(index: currentViewControllerIndex, animated: false)
 	}
 	
     public var wrapEnabled: Bool = false {
@@ -90,7 +90,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         }
         
         suppressScrollEvent = true
-        scrollView.contentSize = CGSizeMake(view.bounds.width * pages, view.bounds.height)
+        scrollView.contentSize = CGSize(width: view.bounds.width * pages, height: view.bounds.height)
         suppressScrollEvent = false
         
         updateContentOffset()
@@ -111,16 +111,16 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
                 
                 let animation: CATransition = CATransition()
                 animation.type = kCATransitionFade
-                scrollView.layer.addAnimation(animation, forKey: nil)
+                scrollView.layer.add(animation, forKey: nil)
             }
             
             controller.view!.removeFromSuperview()
             controller.removeFromParentViewController()
             
-            if let newController = dataSource?.cubeController(self, viewControllerAtIndex: index) {
+            if let newController = dataSource?.cubeController(cubeController: self, viewControllerAtIndex: index) {
                 
                 controllers[index] = newController
-                newController.view.layer.doubleSided = false
+                newController.view.layer.isDoubleSided = false
                 
                 addChildViewController(newController)
                 scrollView.addSubview(newController.view!)
@@ -128,7 +128,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
                 newController.view.layer.transform = transform
                 newController.view.center = center
                 
-                newController.view.userInteractionEnabled = (index == currentViewControllerIndex)
+                newController.view.isUserInteractionEnabled = (index == currentViewControllerIndex)
             }
         }
     }
@@ -156,17 +156,17 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
             offset = max(0, min(offset, numberOfViewControllers - 1))
         }
         
-        scrollView.setContentOffset(CGPointMake(view.bounds.width * CGFloat(offset), 0), animated: animated)
+        scrollView.setContentOffset(CGPoint(x: view.bounds.width * CGFloat(offset), y: 0), animated: animated)
     }
     
     public func scrollForwardAnimated(animated: Bool) {
         
-        scrollToViewControllerAtIndex(currentViewControllerIndex + 1, animated: animated)
+        scrollToViewControllerAtIndex(index: currentViewControllerIndex + 1, animated: animated)
     }
     
     public func scrollBackAnimated(animated: Bool) {
         
-        scrollToViewControllerAtIndex(currentViewControllerIndex - 1, animated: animated)
+        scrollToViewControllerAtIndex(index: currentViewControllerIndex - 1, animated: animated)
     }
     
     public func reloadData() {
@@ -180,7 +180,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         }
         
         controllers.removeAll()
-        numberOfViewControllers = dataSource?.numberOfViewControllersInCubeController(self) ?? 0
+        numberOfViewControllers = dataSource?.numberOfViewControllersInCubeController(cubeController: self) ?? 0
         view.layoutIfNeeded()
     }
     
@@ -207,7 +207,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         
         previousOffset = offset
         suppressScrollEvent = true
-        scrollView.contentOffset = CGPointMake(view.bounds.width * offset, 0.0)
+        scrollView.contentOffset = CGPoint(x: view.bounds.width * offset, y: 0.0)
         suppressScrollEvent = false
     }
     
@@ -215,23 +215,23 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         
         for (index, controller) in controllers {
             
-            if controller.parentViewController == nil {
+            if controller.parent == nil {
                 
-                controller.view.autoresizingMask = .None
-                controller.view.layer.doubleSided = false
+                controller.view.autoresizingMask = []
+                controller.view.layer.isDoubleSided = false
                 addChildViewController(controller)
                 scrollView.addSubview(controller.view)
             }
             
-            var angle: Double = Double(scrollOffset - CGFloat(index)) * M_PI_2
+            var angle: Double = Double(scrollOffset - CGFloat(index)) * (.pi / 2)
             
             while angle < 0 {
                 
-                angle += M_PI * 2
+                angle += .pi * 2
             }
-            while angle > M_PI * 2 {
+            while angle > .pi * 2 {
                 
-                angle -= M_PI * 2
+                angle -= .pi * 2
             }
             
             var transform: CATransform3D = CATransform3DIdentity
@@ -244,7 +244,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
                 transform = CATransform3DTranslate(transform, 0, 0, view.bounds.size.width / 2.0)
             }
             
-            var contentOffset = CGPointZero
+            var contentOffset = CGPoint.zero
             
             if let controllerScrollView = controller.view as? UIScrollView {
                 
@@ -253,7 +253,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
             
             controller.view.bounds = view.bounds
             
-            controller.view.center = CGPointMake(view.bounds.size.width / 2.0 + scrollView.contentOffset.x, view.bounds.size.height / 2.0)
+            controller.view.center = CGPoint(x: view.bounds.size.width / 2.0 + scrollView.contentOffset.x, y: view.bounds.size.height / 2.0)
             
             controller.view.layer.transform = transform
             
@@ -293,7 +293,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
                 
                 controller.view!.removeFromSuperview()
                 controller.removeFromParentViewController()
-                controllers.removeValueForKey(index)
+                controllers.removeValue(forKey: index)
             }
         }
         
@@ -306,7 +306,7 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
             
                 if numberOfViewControllers > 0 {
                     
-                    if let newController = dataSource?.cubeController(self, viewControllerAtIndex: (index + numberOfViewControllers) % numberOfViewControllers) {
+                    if let newController = dataSource?.cubeController(cubeController: self, viewControllerAtIndex: (index + numberOfViewControllers) % numberOfViewControllers) {
                         
                         controllers[index] = newController
                     }
@@ -319,13 +319,13 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         
         for (index, controller) in controllers {
             
-            controller.view.userInteractionEnabled = (index == currentViewControllerIndex)
+            controller.view.isUserInteractionEnabled = (index == currentViewControllerIndex)
         }
     }
     
     //MARK: UIScrollViewDelegate
     
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if !suppressScrollEvent {
             
@@ -366,11 +366,11 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
             updateLayout()
             
             //update delegate
-            delegate?.cubeControllerDidScroll?(self)
+            delegate?.cubeControllerDidScroll?(cubeController: self)
             
             if currentViewControllerIndex != previousViewControllerIndex {
                 
-                delegate?.cubeControllerCurrentViewControllerIndexWillChange?(self)
+                delegate?.cubeControllerCurrentViewControllerIndexWillChange?(cubeController: self)
             }
             
             //enable/disable interaction
@@ -378,59 +378,59 @@ public class MKCubeViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         
         if !suppressScrollEvent {
             
-            delegate?.cubeControllerWillBeginDragging?(self)
+            delegate?.cubeControllerWillBeginDragging?(cubeController: self)
         }
     }
     
-    public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         
         if !suppressScrollEvent {
             
-            delegate?.cubeControllerDidEndDragging?(self, willDecelerate: decelerate)
+            delegate?.cubeControllerDidEndDragging?(cubeController: self, willDecelerate: decelerate)
 			
 			if !decelerate {
 				
-				delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
+                delegate?.cubeControllerCurrentViewControllerIndexDidChange?(cubeController: self)
 			}
         }
     }
 	
-    public func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         
         if !suppressScrollEvent {
             
-            delegate?.cubeControllerWillBeginDecelerating?(self)
+            delegate?.cubeControllerWillBeginDecelerating?(cubeController: self)
         }
     }
     
-    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
         if !suppressScrollEvent {
             
-            delegate?.cubeControllerDidEndDecelerating?(self)
+            delegate?.cubeControllerDidEndDecelerating?(cubeController: self)
 			
-			delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
+            delegate?.cubeControllerCurrentViewControllerIndexDidChange?(cubeController: self)
         }
     }
     
-    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         
         let nearestIntegralOffset = round(scrollOffset)
         
         if abs(scrollOffset - nearestIntegralOffset) > 0.0 {
             
-            scrollToViewControllerAtIndex(currentViewControllerIndex, animated: true)
+            scrollToViewControllerAtIndex(index: currentViewControllerIndex, animated: true)
         }
         
         if !suppressScrollEvent {
             
-            delegate?.cubeControllerDidEndScrollingAnimation?(self)
+            delegate?.cubeControllerDidEndScrollingAnimation?(cubeController: self)
 			
-			delegate?.cubeControllerCurrentViewControllerIndexDidChange?(self)
+            delegate?.cubeControllerCurrentViewControllerIndexDidChange?(cubeController: self)
         }
     }
 }
